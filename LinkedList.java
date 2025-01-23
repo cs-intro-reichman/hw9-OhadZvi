@@ -186,7 +186,7 @@ public class LinkedList {
 			}
 		} else if (isLast) {
 			prev = getNode(ind - 1);
-			prev.next = null;
+			// prev.next = null;
 			last = prev;
 		} else {
 			prev = getNode(ind - 1);
@@ -257,17 +257,13 @@ public class LinkedList {
 	 * A textual representation of this list, for debugging.
 	 */
 	public String toString() {
-		if (size == 0) return "()";
-		// Starting from the first node, iterates through this list
-		// and builds the string incrementally
-		String str = "(";
-		Node current = first;
-		while (current != null) {
-			str += current.block + " ";
-			current = current.next;
+		String resString = "";
+		ListIterator it = iterator();
+		while (it.hasNext()) {
+			resString += it.current.block + " ";
+			it.next();
 		}
-		// Removes the trailing space and adds the ‘)’
-		return str.substring(0, str.length() - 1) + ")";
+	return resString;
 	}
 	public void main() {
 		LinkedList tester = new LinkedList();

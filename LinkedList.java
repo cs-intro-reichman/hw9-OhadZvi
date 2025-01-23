@@ -50,12 +50,12 @@ public class LinkedList {
 	 * @return the node at the given index
 	 */		
 	public Node getNode(int index) {
-		if (index < 0 || index > size) {
-			throw new IllegalArgumentException(
-					"index must be between 0 and size");
+		indexValidityCheck(index);
+		ListIterator iterator = iterator();
+		for (int i = 0; i < index; i++) {
+			iterator.next();
 		}
-		//// Replace the following statement with your code
-		return null;
+		return iterator.current;
 	}
 	
 	/**
@@ -78,7 +78,21 @@ public class LinkedList {
 	 *         if index is negative or greater than the list's size
 	 */
 	public void add(int index, MemoryBlock block) {
-		//// Write your code here
+		indexValidityCheck(index);
+		if (index == 0) {
+			addFirst(block);
+		} else {
+		if (index == size) {
+			addLast(block);
+		} else {
+			Node curr = new Node(block);
+			Node prev = getNode(index - 1);
+			Node next = prev.next;
+			prev.next = curr;
+			curr.next = next;
+			size++;
+		}
+		}
 	}
 
 	/**
@@ -89,7 +103,15 @@ public class LinkedList {
 	 *        the given memory block
 	 */
 	public void addLast(MemoryBlock block) {
-		//// Write your code here
+		Node curr = new Node(block);
+		if (size == 0) {
+			last = curr;
+			first = curr;
+		} else {
+			last.next = curr;
+			last = curr;
+		}
+		size++;
 	}
 	
 	/**
@@ -100,7 +122,15 @@ public class LinkedList {
 	 *        the given memory block
 	 */
 	public void addFirst(MemoryBlock block) {
-		//// Write your code here
+		Node curr = new Node(block);
+		if (size == 0) {
+			first = curr;
+			last = curr;
+		} else {
+			curr.next = first;
+			first = curr;
+		}
+		size++;
 	}
 
 	/**
@@ -113,8 +143,8 @@ public class LinkedList {
 	 *         if index is negative or greater than or equal to size
 	 */
 	public MemoryBlock getBlock(int index) {
-		//// Replace the following statement with your code
-		return null;
+		indexValidityCheck(index, true);
+		return getNode(index).block;
 	}	
 
 	/**
@@ -125,7 +155,13 @@ public class LinkedList {
 	 * @return the index of the block, or -1 if the block is not in this list
 	 */
 	public int indexOf(MemoryBlock block) {
-		//// Replace the following statement with your code
+		ListIterator iterator = iterator();
+		for (int i = 0; i < size; i++) {
+			if (iterator.current.block.equals(block)) {
+				return i;
+			}
+			iterator.next();
+		}
 		return -1;
 	}
 
@@ -167,7 +203,30 @@ public class LinkedList {
 	public ListIterator iterator(){
 		return new ListIterator(first);
 	}
-	
+
+	/**
+	 * @throws IllegalArgumentException
+	 *         if the given memory block is not in this list
+	 */
+	public void indexValidityCheck(int index){
+		if (index < 0 || index > size) {
+			throw new IllegalArgumentException(
+				"index must be between 0 and size");
+		}
+	}
+
+	/**
+	 *Overrides inindexValidityCheck for cases where index cannot be equal to size 
+	 * @throws IllegalArgumentException
+	 *         if the given memory block is not in this list
+	 */
+	public void indexValidityCheck(int index, boolean foo){
+		if (index < 0 || index >= size) {
+			throw new IllegalArgumentException(
+				"index must be between 0 and size");
+		}
+	}
+
 	/**
 	 * A textual representation of this list, for debugging.
 	 */

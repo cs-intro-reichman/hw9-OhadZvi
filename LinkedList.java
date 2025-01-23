@@ -172,7 +172,28 @@ public class LinkedList {
 	 *        the node that will be removed from this list
 	 */
 	public void remove(Node node) {
-		//// Write your code here
+		int ind = indexOf(node.block);
+		boolean isFirst = ind == 0;
+		boolean isLast = ind == size - 1;
+		Node prev = null;
+		Node next = null;
+		if (isFirst) {
+			if (size == 1) {
+				first = null;
+				last = first;
+			} else {
+				first = getNode(1);
+			}
+		} else if (isLast) {
+			prev = getNode(ind - 1);
+			prev.next = null;
+			last = prev;
+		} else {
+			prev = getNode(ind - 1);
+			next = getNode(ind + 1);
+			prev.next = next;
+		}
+		size--;
 	}
 
 	/**
@@ -183,7 +204,9 @@ public class LinkedList {
 	 *         if index is negative or greater than or equal to size
 	 */
 	public void remove(int index) {
-		//// Write your code here
+		indexValidityCheck(index, true);
+		Node node = getNode(index);
+		remove(node);
 	}
 
 	/**
@@ -194,7 +217,10 @@ public class LinkedList {
 	 *         if the given memory block is not in this list
 	 */
 	public void remove(MemoryBlock block) {
-		//// Write your code here
+		int ind = indexOf(block);
+		indexValidityCheck(ind);
+		Node node = getNode(ind);
+		remove(node);
 	}	
 
 	/**
@@ -216,7 +242,7 @@ public class LinkedList {
 	}
 
 	/**
-	 *Overrides inindexValidityCheck for cases where index cannot be equal to size 
+	 *Overloads indexValidityCheck for cases where index cannot be equal to size 
 	 * @throws IllegalArgumentException
 	 *         if the given memory block is not in this list
 	 */
@@ -231,7 +257,28 @@ public class LinkedList {
 	 * A textual representation of this list, for debugging.
 	 */
 	public String toString() {
-		//// Replace the following statement with your code
-		return "";
+		if (size == 0) return "()";
+		// Starting from the first node, iterates through this list
+		// and builds the string incrementally
+		String str = "(";
+		Node current = first;
+		while (current != null) {
+			str += current.block + " ";
+			current = current.next;
+		}
+		// Removes the trailing space and adds the ‘)’
+		return str.substring(0, str.length() - 1) + ")";
+	}
+	public void main() {
+		LinkedList tester = new LinkedList();
+		MemoryBlock block = new MemoryBlock(10, 1000);
+        tester.add(0, block);
+        MemoryBlock block2 = new MemoryBlock(20, 2000);
+        tester.add(0, block2);
+        MemoryBlock block3 = new MemoryBlock(30, 3000);
+        tester.add(1, block3);
+        MemoryBlock block4 = new MemoryBlock(40, 4000);
+        tester.add(3, block4);
+		System.out.println(tester);
 	}
 }

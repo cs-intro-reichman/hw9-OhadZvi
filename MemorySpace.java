@@ -92,7 +92,10 @@ public class MemorySpace {
 			it.next();
 			if (!it.hasNext()) return;
 		}
-		if (!it.hasNext()) return;
+		if (!it.hasNext()) {
+			throw new IllegalArgumentException(
+				"index must be between 0 and size");
+		}
 		MemoryBlock block = it.current.block;
 		freeList.addLast(block);
 		allocatedList.remove(block);
@@ -112,7 +115,30 @@ public class MemorySpace {
 	 * In this implementation Malloc does not call defrag.
 	 */
 	public void defrag() {
-		/// TODO: Implement defrag test
-		//// Write your code here
+		boolean whileFlag = true;
+		while (whileFlag) {
+			whileFlag = false;
+			boolean defragFlag = false;
+			Node defraged = null;
+			ListIterator iteri = freeList.iterator();
+			outerLoop:
+			for (int i = 0; i < freeList.getSize(); i++) {
+				ListIterator iterj = new ListIterator(iteri.current.next);
+				for (int j = i + 1; j < freeList.getSize(); j++) {
+					if (iteri.current.block.baseAddress + iteri.current.block.length == iterj.current.block.baseAddress) {
+						whileFlag = true;
+						defraged = iterj.current;
+						defragFlag = true;
+						break outerLoop;
+					}
+					iterj.next();
+				}
+				iteri.next();
+			}
+			if (defragFlag) {
+				iteri.current.block.length += defraged.block.length;
+				freeList.remove(defraged);
+			}
+		}
 	}
 }

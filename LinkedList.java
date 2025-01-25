@@ -186,7 +186,7 @@ public class LinkedList {
 			}
 		} else if (isLast) {
 			prev = getNode(ind - 1);
-			// prev.next = null;
+			prev.next = null;
 			last = prev;
 		} else {
 			prev = getNode(ind - 1);
